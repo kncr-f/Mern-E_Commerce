@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "Mern shopping cart app",
     "main": "server.js",
+    "type": "module",
     "scripts": {
         "start": "node backend/server",
         "server": "nodemon backend/server",
@@ -21,7 +22,8 @@
     "homepage": "https://github.com/kncr-f/Mern-E_Commerce#readme",
     "dependencies": {
         "dotenv": "^16.0.0",
-        "express": "^4.17.3"
+        "express": "^4.17.3",
+        "mongoose": "^6.2.4"
     },
     "devDependencies": {
         "concurrently": "^7.0.0",
