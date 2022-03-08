@@ -1,0 +1,22 @@
+{
+    "name": "e_commerce",
+    "version": "1.0.0",
+    "description": "Mern shopping cart app",
+    "main": "server.js",
+    "scripts": {
+        "start": "node backend/server"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/kncr-f/Mern-E_Commerce.git"
+    },
+    "author": "Fatih Kincir",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/kncr-f/Mern-E_Commerce/issues"
+    },
+    "homepage": "https://github.com/kncr-f/Mern-E_Commerce#readme",
+    "dependencies": {
+        "express": "^4.17.3"
+    }
+}
