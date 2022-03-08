@@ -4,7 +4,10 @@
     "description": "Mern shopping cart app",
     "main": "server.js",
     "scripts": {
-        "start": "node backend/server"
+        "start": "node backend/server",
+        "server": "nodemon backend/server",
+        "client": "npm start --prefix frontend",
+        "dev": "concurrently \"npm run server\" \"npm run client\""
     },
     "repository": {
         "type": "git",
@@ -17,6 +20,11 @@
     },
     "homepage": "https://github.com/kncr-f/Mern-E_Commerce#readme",
     "dependencies": {
+        "dotenv": "^16.0.0",
         "express": "^4.17.3"
+    },
+    "devDependencies": {
+        "concurrently": "^7.0.0",
+        "nodemon": "^2.0.15"
     }
 }
