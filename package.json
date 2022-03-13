@@ -8,7 +8,9 @@
         "start": "node backend/server",
         "server": "nodemon backend/server",
         "client": "npm start --prefix frontend",
-        "dev": "concurrently \"npm run server\" \"npm run client\""
+        "dev": "concurrently \"npm run server\" \"npm run client\"",
+        "data:import": "node backend/seeder",
+        "data:destroy": "node backend/seeder -d"
     },
     "repository": {
         "type": "git",
@@ -21,8 +23,11 @@
     },
     "homepage": "https://github.com/kncr-f/Mern-E_Commerce#readme",
     "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "colors": "^1.4.0",
         "dotenv": "^16.0.0",
         "express": "^4.17.3",
+        "express-async-handler": "^1.2.0",
         "mongoose": "^6.2.4"
     },
     "devDependencies": {
