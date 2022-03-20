@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Error from '../components/Error';
 import { Row, Col, ListGroup, Image, Form, Button, Card, ListGroupItem } from "react-bootstrap";
-import { addCartItem } from '../actions/cartActions';
+import { addCartItem, removeCartItem } from '../actions/cartActions';
 
 const CartScreen = ({ match, location, history }) => {
 
@@ -26,6 +26,7 @@ const CartScreen = ({ match, location, history }) => {
 
     const handleRemoveFromCart = (id) => {
         console.log("remove");
+        dispatch(removeCartItem(id));
     }
 
     const handleCheckOut = () => {
@@ -91,7 +92,7 @@ const CartScreen = ({ match, location, history }) => {
                                 variant='dark'
                                 type='button'
                                 className='m-auto'
-                                disable={cartItems.length === 0}
+
                                 onClick={handleCheckOut}>
                                 Proceed To Checkout
                             </Button>
