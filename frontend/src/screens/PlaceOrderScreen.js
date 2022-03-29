@@ -1,14 +1,17 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { Row, Col, Image, ListGroup, Card, Button, ListGroupItem } from "react-bootstrap";
-import FormContainer from '../components/FormContainer';
+
 import CheckoutSteps from '../components/CheckoutSteps';
 import React from 'react';
 import Error from "../components/Error";
 import { Link } from 'react-router-dom';
+import { createOrder } from '../actions/orderActions';
 
-const PlaceOrderScreen = () => {
+const PlaceOrderScreen = ({ history }) => {
     const cart = useSelector((state) => state.cart);
+    console.log("cart...", cart)
+    const dispatch = useDispatch();
     //Calculate prices
 
     const addDecimals = (num) => {
@@ -20,14 +23,29 @@ const PlaceOrderScreen = () => {
     cart.taxPrice = addDecimals(Number((0.15 * cart.itemsPrice).toFixed(2)));
     cart.totalPrice = (Number(cart.itemsPrice) + Number(cart.shippingPrice) + Number(cart.taxPrice)).toFixed(2)
 
+    const orderCreate = useSelector(state => state.orderCreate);
+    const { order, success, error } = orderCreate;
 
+    useEffect(() => {
+        if (success) {
+            history.push(`/order/${order._id}`)
+        }
+        // eslint-disable-next-line
+    }, [history, success])
 
     const handlePlaceOrder = () => {
-        console.log("order");
+        dispatch(createOrder({
+            orderItems: cart.cartItems,
+            shippingAddress: cart.shippingAddress,
+            paymentMethod: cart.paymentMethod,
+            itemsPrice: cart.itemsPrice,
+            shippingPrice: cart.shippingPrice,
+            taxPrice: cart.taxPrice,
+            totalPrice: cart.totalPrice,
+        }))
     }
     return (
         <>
-
             <CheckoutSteps step1 step2 step3 step4 />
             <Row>
                 <Col md={8}>
@@ -118,6 +136,9 @@ const PlaceOrderScreen = () => {
                                 <Col> ${cart.totalPrice}</Col>
 
                             </Row>
+                        </ListGroupItem>
+                        <ListGroupItem>
+                            {error && <Error variant="danger">{error}</Error>}
                         </ListGroupItem>
                         <ListGroupItem>
                             <Button
