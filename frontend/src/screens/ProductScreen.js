@@ -8,8 +8,6 @@ import Error from "../components/Error";
 import Loader from "../components/Loader";
 
 
-
-
 const ProductScreen = ({ history, match }) => {
     const [quantity, setQuantity] = useState(1);
 
