@@ -6,14 +6,23 @@ import Error from "../components/Error";
 import Loader from '../components/Loader';
 import { listUsers } from "../actions/userActions";
 
-const UserListScreen = () => {
+const UserListScreen = ({ history }) => {
     const dispatch = useDispatch();
+
     const userList = useSelector(state => state.userList);
     const { users, loading, error } = userList;
 
+    const userLogin = useSelector(state => state.userLogin);
+    const { userInfo } = userLogin;
+
     useEffect(() => {
-        dispatch(listUsers());
-    }, [dispatch]);
+        if (userInfo && userInfo.isAdmin) {
+
+            dispatch(listUsers());
+        } else {
+            history.push("/login");
+        }
+    }, [userInfo, dispatch, history]);
 
     const handleDelete = (id) => {
         console.log("delete")
