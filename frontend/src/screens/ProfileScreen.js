@@ -160,7 +160,7 @@ const ProfileScreen = (props) => {
                                     </td>
                                     <td>
                                         <LinkContainer to={`/order/${order._id}`}>
-                                            <Button variant='dark'> Details</Button>
+                                            <Button className='btn-sm' variant='dark'> Details</Button>
 
                                         </LinkContainer>
                                     </td>
