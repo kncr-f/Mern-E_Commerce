@@ -101,7 +101,7 @@ const UserEditScreen = ({ match, history }) => {
 
 
 
-                            <Button type='submit' variant='primary'>
+                            <Button className='my-3' type='submit' variant='primary'>
                                 Update
                             </Button>
 
