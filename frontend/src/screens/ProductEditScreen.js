@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import axios from "axios";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Form, Button } from "react-bootstrap";
@@ -20,6 +21,7 @@ const ProductEditScreen = ({ match, history }) => {
     const [category, setCategory] = useState("");
     const [countInStock, setCountInStock] = useState(0);
     const [description, setDescription] = useState("");
+    const [uploading, setUploading] = useState(false);
 
 
     const dispatch = useDispatch();
@@ -55,6 +57,32 @@ const ProductEditScreen = ({ match, history }) => {
         }
     }, [product, dispatch, productId, history, successUpdate]);
 
+
+    const handleUpload = async (e) => {
+        const file = e.target.files[0];
+        const formData = new FormData();
+        formData.append("image", file);
+        setUploading(true);
+        try {
+            const config = {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+
+                }
+            }
+            const { data } = await axios.post("/api/upload", formData, config);
+
+            setImage(data);
+            setUploading(false);
+        } catch (error) {
+            console.log(error)
+            setUploading(false);
+
+        }
+
+    }
+
+
     const handleSubmit = (e) => {
         e.preventDefault();
         dispatch(updateProduct({ _id: productId, name, price, image, brand, category, countInStock, description }))
@@ -75,7 +103,7 @@ const ProductEditScreen = ({ match, history }) => {
                     (
                         <Form onSubmit={handleSubmit}>
 
-                            <Form.Group controlId='name'>
+                            <Form.Group id='name'>
                                 <Form.Label>Name </Form.Label>
                                 <Form.Control
                                     type='name'
@@ -88,7 +116,7 @@ const ProductEditScreen = ({ match, history }) => {
                                 </Form.Control>
                             </Form.Group>
 
-                            <Form.Group controlId='price'>
+                            <Form.Group id='price'>
                                 <Form.Label>Price</Form.Label>
                                 <Form.Control
                                     type='number'
@@ -99,7 +127,7 @@ const ProductEditScreen = ({ match, history }) => {
                                 </Form.Control>
                             </Form.Group>
 
-                            <Form.Group controlId='image'>
+                            <Form.Group id='image'>
 
                                 <Form.Label>Image</Form.Label>
                                 <Form.Control
@@ -108,12 +136,20 @@ const ProductEditScreen = ({ match, history }) => {
                                     value={image}
                                     onChange={(e) => setImage(e.target.value)}
                                 >
+                                </Form.Control>
+
+                                <Form.Control
+                                    type="file"
+                                    id="image-file"
+                                    label="Choose File"
+                                    onChange={handleUpload}>
 
                                 </Form.Control>
+                                {uploading && <Loader />}
 
                             </Form.Group>
 
-                            <Form.Group controlId='brand'>
+                            <Form.Group id='brand'>
 
                                 <Form.Label>Brand</Form.Label>
                                 <Form.Control
@@ -127,7 +163,7 @@ const ProductEditScreen = ({ match, history }) => {
 
                             </Form.Group>
 
-                            <Form.Group controlId='countInStock'>
+                            <Form.Group id='countInStock'>
                                 <Form.Label>Count In Stock</Form.Label>
                                 <Form.Control
                                     type='number'
@@ -138,7 +174,7 @@ const ProductEditScreen = ({ match, history }) => {
                                 </Form.Control>
                             </Form.Group>
 
-                            <Form.Group controlId='category'>
+                            <Form.Group id='category'>
 
                                 <Form.Label>Category</Form.Label>
                                 <Form.Control
@@ -152,7 +188,7 @@ const ProductEditScreen = ({ match, history }) => {
 
                             </Form.Group>
 
-                            <Form.Group controlId='description'>
+                            <Form.Group id='description'>
 
                                 <Form.Label>Description</Form.Label>
                                 <Form.Control
