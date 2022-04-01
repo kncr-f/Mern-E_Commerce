@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Table, Button, Row, Col } from "react-bootstrap";
 import Error from "../components/Error";
 import Loader from '../components/Loader';
-import { listProducts, deleteProduct } from "../actions/productActions";
+import { listProducts, deleteProduct, createProduct } from "../actions/productActions";
+import { PRODUCT_CREATE_RESET } from '../constants/productConstants';
 
 const ProductListScreen = ({ history, match }) => {
     const dispatch = useDispatch();
@@ -15,18 +16,30 @@ const ProductListScreen = ({ history, match }) => {
     const productDelete = useSelector(state => state.productDelete);
     const { success: successDelete, loading: loadingDelete, error: errorDelete } = productDelete;
 
+    const productCreate = useSelector(state => state.productCreate);
+    const {
+        success: successCreate,
+        loading: loadingCreate,
+        error: errorCreate,
+        product: createdProduct
+    } = productCreate;
+
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
 
 
     useEffect(() => {
-        if (userInfo && userInfo.isAdmin) {
+        dispatch({ type: PRODUCT_CREATE_RESET });
 
-            dispatch(listProducts());
-        } else {
+        if (!userInfo.isAdmin) {
             history.push("/login");
         }
-    }, [userInfo, dispatch, history, successDelete]);
+        if (successCreate) {
+            history.push(`/admin/product/${createdProduct._id}/edit`)
+        } else {
+            dispatch(listProducts());
+        }
+    }, [userInfo, dispatch, history, successDelete, successCreate, createdProduct]);
 
     const handleDelete = (id) => {
         if (window.confirm("Are You sure?")) {
@@ -36,8 +49,9 @@ const ProductListScreen = ({ history, match }) => {
     };
 
     const handleCreateProduct = () => {
-        console.log("create product");
+        dispatch(createProduct());
     }
+
     return (
         <>
             <Row className="align-items-center">
@@ -52,6 +66,10 @@ const ProductListScreen = ({ history, match }) => {
             </Row>
             {loadingDelete && <Loader />}
             {errorDelete && <Error variant="danger">{errorDelete}</Error>}
+
+            {loadingCreate && <Loader />}
+            {errorCreate && <Error variant="danger">{errorCreate}</Error>}
+
             {loading ? <Loader /> : error ? <Error variant="danger">{error}</Error> : (
                 <Table striped bordered hover responsive className='table-sm'>
                     <thead>
