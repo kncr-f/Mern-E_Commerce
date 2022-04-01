@@ -19,6 +19,7 @@ const UserEditScreen = ({ match, history }) => {
 
 
     const dispatch = useDispatch();
+
     const userDetails = useSelector(state => state.userDetails);
     const { user, loading, error } = userDetails;
 
@@ -30,7 +31,7 @@ const UserEditScreen = ({ match, history }) => {
     useEffect(() => {
         if (successUpdate) {
             dispatch({ type: USER_UPDATE_RESET });
-            history.push("/admin/userList");
+            history.push("/admin/userlist");
         } else {
 
             if (!user.name || user._id !== userId) {
