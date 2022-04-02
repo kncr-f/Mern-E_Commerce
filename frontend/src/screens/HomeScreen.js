@@ -7,7 +7,9 @@ import Loader from "../components/Loader";
 import { listProducts } from "../actions/productActions";
 
 
-const HomeScreen = () => {
+const HomeScreen = ({ match }) => {
+    const searchTerm = match.params.search;
+
     const dispatch = useDispatch();
 
     const productList = useSelector(state => state.productList);
@@ -17,9 +19,9 @@ const HomeScreen = () => {
 
     useEffect(() => {
 
-        dispatch(listProducts())
+        dispatch(listProducts(searchTerm))
 
-    }, [dispatch]);
+    }, [dispatch, searchTerm]);
 
 
 
