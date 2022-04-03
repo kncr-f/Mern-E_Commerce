@@ -5,43 +5,56 @@ import Product from "../components/Product";
 import Error from "../components/Error";
 import Loader from "../components/Loader";
 import { listProducts } from "../actions/productActions";
+import Paginate from '../components/Paginate';
+import ProductCarousel from '../components/ProductCarousel';
 
 
 const HomeScreen = ({ match }) => {
     const searchTerm = match.params.search;
+    const pageNumber = match.params.pageNumber || 1;
 
     const dispatch = useDispatch();
 
     const productList = useSelector(state => state.productList);
-    const { loading, error, products } = productList;
+    const { loading, error, products, currentPage, totalPagesNum } = productList;
 
 
 
     useEffect(() => {
 
-        dispatch(listProducts(searchTerm))
+        dispatch(listProducts(searchTerm, pageNumber))
 
-    }, [dispatch, searchTerm]);
+    }, [dispatch, searchTerm, pageNumber]);
 
 
 
 
     return (
         <>
+            {!searchTerm && <ProductCarousel />}
             <h1>Latest products</h1>
             {loading ? <Loader />
                 : error ? <Error variant="info">{error}</Error>
-                    : (<Row>
-                        {products.map((product) => (
-                            <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                    : (
+                        <>
+                            <Row>
+                                {products.map((product) => (
+                                    <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
 
-                                <Product product={product} />
+                                        <Product product={product} />
 
-                            </Col>
+                                    </Col>
 
-                        ))}
-                    </Row>)
-            }
+                                ))}
+                            </Row>
+                            <Paginate
+                                totalPagesNum={totalPagesNum}
+                                currentPage={currentPage}
+                                searchTerm={searchTerm ? searchTerm : ""}
+                            />
+                        </>
+
+                    )}
 
         </>
     )
