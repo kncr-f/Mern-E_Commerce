@@ -25,18 +25,22 @@ const ProductScreen = ({ history, match }) => {
     const { userInfo } = userLogin;
 
     const productReviewCreate = useSelector(state => state.productReviewCreate);
-    const { success: successReviewCreate, error: errorReviewCreate } = productReviewCreate;
+    const { success: successReviewCreate, loading: loadingProductReview, error: errorReviewCreate } = productReviewCreate;
 
 
     useEffect(() => {
         if (successReviewCreate) {
-            alert("Review Submitted!")
+
             setRating(0);
             setComment("");
             dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
         }
 
-        dispatch(listProductDetails(match.params.id))
+        if (!product._id || product._id !== match.params.id) {
+            dispatch(listProductDetails(match.params.id))
+            dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
+        }
+
 
     }, [dispatch, match, successReviewCreate]);
 
@@ -153,6 +157,12 @@ const ProductScreen = ({ history, match }) => {
                                 ))}
                                 <ListGroupItem>
                                     <h2>Write a Customer Review</h2>
+                                    {successReviewCreate && (
+                                        <Error variant='success'>
+                                            Review submitted successfully
+                                        </Error>
+                                    )}
+                                    {loadingProductReview && <Loader />}
                                     {errorReviewCreate && <Error variant="danger">{errorReviewCreate}</Error>}
                                     {userInfo ? (
                                         <Form onSubmit={handleSubmit}>
@@ -180,7 +190,7 @@ const ProductScreen = ({ history, match }) => {
                                                     onChange={(e) => setComment(e.target.value)}>
                                                 </FormControl>
                                             </FormGroup>
-                                            <Button type='submit' variant='primary'>Submit</Button>
+                                            <Button type='submit' variant='primary' disabled={loadingProductReview}>Submit</Button>
 
                                         </Form>
                                     ) :

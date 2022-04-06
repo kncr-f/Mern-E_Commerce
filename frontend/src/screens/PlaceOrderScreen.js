@@ -7,11 +7,20 @@ import React from 'react';
 import Error from "../components/Error";
 import { Link } from 'react-router-dom';
 import { createOrder } from '../actions/orderActions';
+import { ORDER_CREATE_RESET } from '../constants/orderConstants';
+import { USER_DETAILS_RESET } from '../constants/userConstants'
 
 const PlaceOrderScreen = ({ history }) => {
     const cart = useSelector((state) => state.cart);
-    console.log("cart...", cart)
+
     const dispatch = useDispatch();
+
+    if (!cart.shippingAddress.address) {
+        history.push('/shipping')
+    } else if (!cart.paymentMethod) {
+        history.push('/payment')
+    }
+
     //Calculate prices
 
     const addDecimals = (num) => {
@@ -28,7 +37,9 @@ const PlaceOrderScreen = ({ history }) => {
 
     useEffect(() => {
         if (success) {
-            history.push(`/order/${order._id}`)
+            history.push(`/order/${order._id}`);
+            dispatch({ type: USER_DETAILS_RESET });
+            dispatch({ type: ORDER_CREATE_RESET });
         }
         // eslint-disable-next-line
     }, [history, success])
