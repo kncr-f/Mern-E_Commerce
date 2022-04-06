@@ -8,7 +8,7 @@ const FormContainer = ({ children }) => {
                     {children}
                 </Col>
             </Row>
-            FormContainer</Container>
+        </Container>
     );
 };
 
