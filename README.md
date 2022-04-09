@@ -1,7 +1,7 @@
 # Mern-E_Commerce
 This project was built with the Mern stack & Redux.
 
-##Overview
+## Overview
 
 This project presents an e_commerce Platform where users can register, log in, see the products details, price etc., add the products to their carts. Users can also experience the payment steps with using paypal payment methods which make possible that using a fake account with the help of the PayPal API.
 
